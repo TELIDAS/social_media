@@ -1,10 +1,16 @@
 from django.db import models
 from post_user import models as post_model
+
+
 def upload_to(instance, filename):
     return '%s' % filename
 
+
 class Country(models.Model):
     name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f'{self.name}'
 
 
 class Post(models.Model):
@@ -20,6 +26,9 @@ class Post(models.Model):
     description = models.TextField()
     image = models.ImageField(upload_to='')
 
+    def __str__(self):
+        return f'{self.title}'
+
 
 class PostImage(models.Model):
     news = models.ForeignKey(Post, on_delete=models.SET_NULL,
@@ -27,7 +36,8 @@ class PostImage(models.Model):
                              related_name='images')
     image = models.ImageField(null=True,
                               blank=True,
-                              upload_to=upload_to)
+                              upload_to=upload_to,
+                              )
 
 
 class Comment(models.Model):

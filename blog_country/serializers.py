@@ -2,13 +2,6 @@ from rest_framework import serializers
 from . import models
 
 
-class CountrySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = models.Country
-        fields = ['id',
-                  'name']
-
-
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = models.PostImage
@@ -22,9 +15,22 @@ class CommentSerializer(serializers.ModelSerializer):
 
 
 class PostSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True)
-    comment = CommentSerializer()
 
     class Meta:
         model = models.Post
-        fields = '__all__'
+        fields = ['id',
+                  'title',
+                  'description',
+                  'image',
+                  'user',
+                  'country',
+                  'comment_model',]
+
+
+class CountrySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = models.Country
+        fields = ['id',
+                  'name',
+                  'country_post',]
