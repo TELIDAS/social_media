@@ -1,0 +1,33 @@
+version: '2.1'
+services:
+  Backend:
+    image: social_media
+    container_name: social_media
+    ports:
+      - "${PORT:-8000}:8000"
+    depends_on:
+      PostgreSQL:
+        condition: service_healthy
+    environment:
+      - DATABASE_NAME=social_media
+      - DATABASE_USER=social_media_user
+      - DATABASE_PASSWORD=password
+      - DATABASE_HOST=postgres
+
+  PostgreSQL:
+    image: postgres
+    container_name: postgres
+    ports:
+      - "${DB_PORT:-5433}:5432"
+    volumes:
+      - ./pg_data:/var/lib/postgresql/pgdata
+
+    environment:
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_USER=social_media_user
+      - POSTGRES_DB=social_media
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
